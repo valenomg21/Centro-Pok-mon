@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Curar Pokemon - Centro Pokemon</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
+      <span>CENTRO<br>POKEMON</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" alt="" />
+        Inicio
+      </a></li>
+      <li><a href="registrar.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        Registrar
+      </a></li>
+      <li><a href="curar.html" class="active">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        Curar
+      </a></li>
+      <li><a href="salas.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        Internacion
+      </a></li>
+    </ul>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-header">
+      <h1>Pokemones Registrados</h1>
+      <p>Listado completo de pacientes del centro. Podes curar, editar o derivar a internacion.</p>
+    </div>
+
+    <!-- FILTROS -->
+    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="filtrarPor('todos', this)">Todos</button>
+        <button class="tab-btn" onclick="filtrarPor('sano', this)">Sanos</button>
+        <button class="tab-btn" onclick="filtrarPor('critico', this)">Criticos</button>
+        <button class="tab-btn" onclick="filtrarPor('internado', this)">Internados</button>
+      </div>
+      <input
+        type="text"
+        id="buscador"
+        class="form-control"
+        placeholder="Buscar por nombre..."
+        style="max-width: 240px;"
+        oninput="renderTabla()"
+      />
+    </div>
+
+    <!-- TABLA -->
+    <div class="pokemon-table-wrapper" id="tabla-wrapper">
+      <div class="loading-spinner"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- MODAL CURAR -->
+  <div class="curar-modal-overlay" id="modal-curar">
+    <div class="curar-modal">
+      <img
+        id="modal-pokemon-img"
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/35.png"
+        alt="Pokemon curando"
+      />
+      <h2 id="modal-titulo">Curando a<br>tu Pokemon...</h2>
+      <p id="modal-texto">La Enfermera Joy esta trabajando. Por favor espera.</p>
+      <div class="barra-cura">
+        <div class="barra-cura-fill" id="barra-fill"></div>
+      </div>
+      <button class="btn btn-primary btn-full" id="modal-btn-ok" style="display:none;" onclick="cerrarModal()">
+        Listo! Gracias por esperar
+      </button>
+    </div>
+  </div>
+
+  <!-- MODAL EDITAR -->
+  <div class="curar-modal-overlay" id="modal-editar">
+    <div class="curar-modal" style="text-align: left; max-width: 500px;">
+      <h2 style="margin-bottom: 1rem;">Editar Pokemon</h2>
+      <input type="hidden" id="edit-id" />
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label>Estado de Salud</label>
+        <select id="edit-estado" class="form-control">
+          <option value="sano">Sano</option>
+          <option value="debil">Debil</option>
+          <option value="herido">Herido</option>
+          <option value="grave">Grave</option>
+          <option value="critico">Critico</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label>Condicion / Efecto</label>
+        <select id="edit-efecto" class="form-control">
+          <option value="ninguno">Ninguno</option>
+          <option value="envenenado">Envenenado</option>
+          <option value="paralizado">Paralizado</option>
+          <option value="quemado">Quemado</option>
+          <option value="dormido">Dormido</option>
+          <option value="congelado">Congelado</option>
+          <option value="confundido">Confundido</option>
+        </select>
+      </div>
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label>Nivel</label>
+        <div class="nivel-row">
+          <input type="range" id="edit-nivel" min="1" max="100" value="5" />
+          <span class="nivel-display" id="edit-nivel-valor">5</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
+        <button class="btn btn-primary" onclick="guardarEdicion()">Guardar Cambios</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIO -->
+  <audio id="audio-cura" preload="auto">
+    <!--
+      INSTRUCCION: Descarga el archivo "pokemon-center.mp3" y ponelo en frontend/assets/
+      Podés buscarlo en: https://downloads.khinsider.com/game-soundtracks/album/pokemon-red-blue
+      O usar cualquier version libre del tema del Centro Pokemon.
+      El nombre del archivo debe ser: pokemon-center.mp3
+    -->
+    <source src="assets/pokemon-center.mp3" type="audio/mpeg" />
+  </audio>
+
+  <script src="js/curar.js"></script>
+</body>
+</html>

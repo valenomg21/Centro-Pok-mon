@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Centro Pokemon - Enfermera Joy</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
+      <span>CENTRO<br>POKEMON</span>
+    </a>
+    <ul class="navbar-nav">
+      <li>
+        <a href="index.html" class="active">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" alt="" />
+          Inicio
+        </a>
+      </li>
+      <li>
+        <a href="./js/registar.js">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+          Registrar
+        </a>
+      </li>
+      <li>
+        <a href="./js/curar.js">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+          Curar
+        </a>
+      </li>
+      <li>
+        <a href="./js/salas.js">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+          Internacion
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <div class="hero-badge">SISTEMA DE GESTION - ENFERMERA JOY</div>
+      <h1 class="hero-title">Bienvenido<br>al Centro<br>Pokemon</h1>
+      <p class="hero-subtitle">
+        Aqui podras registrar, curar e internar pokemones. Todos los pacientes estan bajo el cuidado de la Enfermera Joy.
+      </p>
+      <div class="hero-actions">
+        <a href="registrar.html" class="btn btn-primary">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+          Registrar Pokemon
+        </a>
+        <a href="curar.html" class="btn btn-secondary">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+          Ver Pokemones
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-image">
+      <!-- Sprite oficial de Enfermera Joy desde PokeAPI -->
+      <img
+        src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/39.png"
+        alt="Enfermera Joy"
+        id="joy-img"
+        onerror="this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/113.png'"
+      />
+    </div>
+  </section>
+
+  <!-- ESTADISTICAS RAPIDAS -->
+  <section class="page-container">
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-total">--</h3>
+          <p>Pokemones registrados</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-sanos">--</h3>
+          <p>En buenas condiciones</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-criticos">--</h3>
+          <p>Estado critico</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-internados">--</h3>
+          <p>Internados</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- NAVEGACION RAPIDA -->
+    <div class="hero-cards">
+      <a href="registrar.html" class="nav-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        <h3>Registrar<br>Pokemon</h3>
+        <p>Ingresa un nuevo pokemon al sistema del centro con todos sus datos clinicos.</p>
+      </a>
+      <a href="curar.html" class="nav-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        <h3>Curar<br>Pokemon</h3>
+        <p>Revisa y cura a los pokemones que se encuentran en tratamiento ambulatorio.</p>
+      </a>
+      <a href="salas.html" class="nav-card" style="border-top-color: var(--azul-centro);">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        <h3>Salas de<br>Internacion</h3>
+        <p>Administra las salas y los pokemones en estado critico que requieren internacion.</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
+    <p>TODOS LOS POKEMONES MERECEN ATENCION</p>
+  </footer>
+
+  <script>
+    const API = 'http://localhost:3000';
+
+    async function cargarStats() {
+      try {
+        const res = await fetch(`${API}/pokemon`);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+
+        const total = data.length;
+        const criticos = data.filter(p => p.estadoSalud === 'critico').length;
+        const internados = data.filter(p => p.internado).length;
+        const sanos = total - criticos;
+
+        document.getElementById('stat-total').textContent = total;
+        document.getElementById('stat-sanos').textContent = sanos;
+        document.getElementById('stat-criticos').textContent = criticos;
+        document.getElementById('stat-internados').textContent = internados;
+      } catch {
+        // Si el backend no esta levantado aun, mostrar maqueta
+        document.getElementById('stat-total').textContent = '0';
+        document.getElementById('stat-sanos').textContent = '0';
+        document.getElementById('stat-criticos').textContent = '0';
+        document.getElementById('stat-internados').textContent = '0';
+      }
+    }
+
+    cargarStats();
+  </script>
+
+</body>
+</html>

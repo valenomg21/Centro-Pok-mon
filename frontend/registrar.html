@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar Pokemon - Centro Pokemon</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
+      <span>CENTRO<br>POKEMON</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" alt="" />
+        Inicio
+      </a></li>
+      <li><a href="registrar.html" class="active">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        Registrar
+      </a></li>
+      <li><a href="curar.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        Curar
+      </a></li>
+      <li><a href="salas.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        Internacion
+      </a></li>
+    </ul>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-header">
+      <h1>Registrar Nuevo Pokemon</h1>
+      <p>Complete los datos clinicos del paciente. La Enfermera Joy se encargara del resto.</p>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start;">
+
+      <!-- FORMULARIO -->
+      <div class="form-card">
+        <div class="form-grid">
+
+          <!-- Nombre -->
+          <div class="form-group span-2">
+            <label>
+              <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+              Nombre del Pokemon
+            </label>
+            <input
+              type="text"
+              id="input-nombre"
+              class="form-control"
+              placeholder="Ej: Pikachu, Charizard..."
+              autocomplete="off"
+            />
+            <small id="buscar-hint" style="color: var(--gris-texto); font-size: 0.78rem;">Escribi el nombre en ingles para cargar la imagen automaticamente.</small>
+          </div>
+
+          <!-- Especie -->
+          <div class="form-group">
+            <label>Especie</label>
+            <input type="text" id="input-especie" class="form-control" placeholder="Ej: Pikachu" />
+          </div>
+
+          <!-- Tipo (se autocompleta) -->
+          <div class="form-group">
+            <label>Tipo</label>
+            <input type="text" id="input-tipo" class="form-control" placeholder="Se autocompleta..." readonly />
+          </div>
+
+          <!-- Nivel -->
+          <div class="form-group span-2">
+            <label>Nivel</label>
+            <div class="nivel-row">
+              <input type="range" id="input-nivel" min="1" max="100" value="5" />
+              <span class="nivel-display" id="nivel-valor">5</span>
+            </div>
+          </div>
+
+          <!-- Estado de salud -->
+          <div class="form-group">
+            <label>Estado de Salud</label>
+            <select id="input-estado" class="form-control">
+              <option value="sano">Sano</option>
+              <option value="debil">Debil</option>
+              <option value="herido">Herido</option>
+              <option value="grave">Grave</option>
+              <option value="critico">Critico</option>
+            </select>
+          </div>
+
+          <!-- Efecto / Condicion -->
+          <div class="form-group">
+            <label>Condicion / Efecto</label>
+            <select id="input-efecto" class="form-control">
+              <option value="ninguno">Ninguno</option>
+              <option value="envenenado">Envenenado</option>
+              <option value="paralizado">Paralizado</option>
+              <option value="quemado">Quemado</option>
+              <option value="dormido">Dormido</option>
+              <option value="congelado">Congelado</option>
+              <option value="confundido">Confundido</option>
+            </select>
+          </div>
+
+          <!-- Entrenador -->
+          <div class="form-group">
+            <label>Entrenador</label>
+            <select id="input-entrenador" class="form-control">
+              <option value="">Cargando...</option>
+            </select>
+          </div>
+
+          <!-- Sala -->
+          <div class="form-group">
+            <label>Sala asignada</label>
+            <select id="input-sala" class="form-control">
+              <option value="">Cargando...</option>
+            </select>
+          </div>
+
+          <!-- Shiny -->
+          <div class="form-group span-2">
+            <label>Es Shiny?</label>
+            <div class="shiny-toggle" id="shiny-toggle">
+              <input type="checkbox" id="input-shiny" />
+              <label class="shiny-toggle-label" for="input-shiny">
+                <span class="shiny-star">&#9733;</span>
+                <span id="shiny-texto">No es shiny</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- ESTADO CRITICO TOGGLE -->
+          <div class="form-group span-2">
+            <div class="critico-toggle">
+              <div class="critico-toggle-label">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+                Estado Critico
+              </div>
+              <label class="switch">
+                <input type="checkbox" id="input-critico" />
+                <span class="slider"></span>
+              </label>
+            </div>
+            <small id="critico-hint" style="color: var(--gris-texto); font-size: 0.78rem; margin-top: 4px;">
+              Si el pokemon esta en estado critico, sera derivado a internacion.
+            </small>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button class="btn btn-secondary" onclick="limpiarFormulario()">Limpiar</button>
+          <button class="btn btn-primary" onclick="registrarPokemon()">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+            Registrar Pokemon
+          </button>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div style="display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 90px;">
+        <div class="pokemon-preview" id="pokemon-preview">
+          <img
+            id="pokemon-img"
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+            alt="Pokemon"
+            style="width: 80px; opacity: 0.3;"
+          />
+          <h3 id="preview-nombre" style="color: var(--gris-texto);">Esperando nombre...</h3>
+          <p id="preview-tipo">Tipo: --</p>
+          <div class="pokemon-types" id="preview-tipos"></div>
+          <div id="preview-shiny" style="display:none;">
+            <span class="shiny-star" style="font-size: 1.4rem; color: var(--amarillo);">&#9733; SHINY</span>
+          </div>
+        </div>
+
+        <!-- Panel info critico -->
+        <div id="panel-critico" style="display:none; background: var(--rojo-suave); border: 2px solid var(--rojo-critico); border-radius: var(--border-radius); padding: 1.2rem; text-align: center;">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" style="width: 32px; margin-bottom: 8px;" />
+          <p style="font-weight: 800; color: var(--rojo-critico); font-size: 0.85rem; margin-bottom: 6px;">ESTADO CRITICO</p>
+          <p style="font-size: 0.8rem; color: var(--gris-texto);">Este pokemon sera enviado directamente a internacion despues del registro.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <footer>
+    <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <script src="js/registrar.js"></script>
+</body>
+</html>

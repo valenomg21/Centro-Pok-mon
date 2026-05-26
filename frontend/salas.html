@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salas de Internacion - Centro Pokemon</title>
+  <link rel="stylesheet" href="./css/style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="navbar-brand">
+      <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
+      <span>CENTRO<br>POKEMON</span>
+    </a>
+    <ul class="navbar-nav">
+      <li><a href="index.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/potion.png" alt="" />
+        Inicio
+      </a></li>
+      <li><a href="registrar.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        Registrar
+      </a></li>
+      <li><a href="curar.html">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        Curar
+      </a></li>
+      <li><a href="salas.html" class="active">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        Internacion
+      </a></li>
+    </ul>
+  </nav>
+
+  <div class="page-container">
+    <div class="page-header" style="display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+      <div>
+        <h1>Salas de Internacion</h1>
+        <p>Pokemones en estado critico bajo supervision permanente de la Enfermera Joy.</p>
+      </div>
+      <button class="btn btn-blue" onclick="abrirModalSala()">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        Agregar a Sala
+      </button>
+    </div>
+
+    <!-- STATS DE SALAS -->
+    <div class="stats-row" id="stats-salas" style="margin-bottom: 2rem;">
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-salas-total">--</h3>
+          <p>Salas totales</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-salas-libres">--</h3>
+          <p>Salas disponibles</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
+        <div class="stat-info">
+          <h3 id="stat-internados">--</h3>
+          <p>Internados activos</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TABS VISTA -->
+    <div class="tabs" style="margin-bottom: 1.5rem;">
+      <button class="tab-btn active" onclick="cambiarVista('salas', this)">Ver por Sala</button>
+      <button class="tab-btn" onclick="cambiarVista('lista', this)">Lista de Internados</button>
+    </div>
+
+    <!-- VISTA SALAS -->
+    <div id="vista-salas">
+      <div class="salas-grid" id="salas-grid">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+
+    <!-- VISTA LISTA -->
+    <div id="vista-lista" style="display:none;">
+      <div class="pokemon-table-wrapper" id="tabla-internados">
+        <div class="loading-spinner"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
+  </footer>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- MODAL AGREGAR A SALA -->
+  <div class="curar-modal-overlay" id="modal-sala">
+    <div class="curar-modal" style="text-align: left; max-width: 480px;">
+      <h2 style="margin-bottom: 1.5rem; text-align: center;">Internar Pokemon</h2>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label>Pokemon a internar</label>
+        <select id="sala-pokemon-select" class="form-control">
+          <option value="">Selecciona un pokemon...</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1rem;">
+        <label>Sala destino</label>
+        <select id="sala-destino-select" class="form-control">
+          <option value="">Selecciona una sala...</option>
+        </select>
+      </div>
+
+      <div class="form-group" style="margin-bottom: 1.5rem;">
+        <label>Motivo de internacion</label>
+        <select id="sala-motivo" class="form-control">
+          <option value="critico">Estado Critico</option>
+          <option value="observacion">Observacion</option>
+          <option value="cirugia">Cirugia programada</option>
+          <option value="recuperacion">Recuperacion post-batalla</option>
+        </select>
+      </div>
+
+      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+        <button class="btn btn-secondary" onclick="cerrarModalSala()">Cancelar</button>
+        <button class="btn btn-danger" onclick="internarPokemon()">
+          <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
+          Internar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/salas.js"></script>
+</body>
+</html>
