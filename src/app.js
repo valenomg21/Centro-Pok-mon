@@ -14,6 +14,17 @@ app.get("/", (req, res) => {
     mensaje: "API Centro Pokemon funcionando"
   })
 })
+// rutas de pacientes
+const pacientesRutas = require('./routes/pacientes');
+app.use('/pacientes', pacientesRutas)
+
+//ruta de salas
+const salasRutas = require('./routes/salas');
+app.use('/salas', salasRutas);
+
+//ruta de centros
+const centrosRutas = require('./routes/centros');
+app.use('/centros', centrosRutas);
 /*
 app.get("/test-pokemon", async (req, res) => {
   try {
