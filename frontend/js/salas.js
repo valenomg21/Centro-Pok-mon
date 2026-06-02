@@ -5,12 +5,29 @@ let todosLosInternados = [];
 let todosLosPokemones = [];
 let vistaActiva = 'salas';
 
-// ─── MAQUETA ─────────────────────────────────────────────────────────────────
 const SALAS_MAQUETA = [
   {
     id: 1,
-    nombre: 'Sala A - Criticos',
-    tipo: 'Cuidados Intensivos',
+    nombre: 'Sala Normal A',
+    tipo: 'Normal',
+    ocupada: true,
+    centro: { nombre: 'Centro Pokemon Pueblo Paleta' },
+    pacientes: [
+      { id: 1, nombre: 'pikachu', especie: 'Pikachu', tipo: 'Electrico', nivel: 35, estadoSalud: 'sano', shiny: false, efecto: 'ninguno', entrenador: { nombre: 'Ash' } }
+    ]
+  },
+  {
+    id: 2,
+    nombre: 'Sala Normal B',
+    tipo: 'Normal',
+    ocupada: false,
+    centro: { nombre: 'Centro Pokemon Pueblo Paleta' },
+    pacientes: []
+  },
+  {
+    id: 3,
+    nombre: 'Sala Critico A',
+    tipo: 'Urgencias',
     ocupada: true,
     centro: { nombre: 'Centro Pokemon Pueblo Paleta' },
     pacientes: [
@@ -18,17 +35,9 @@ const SALAS_MAQUETA = [
     ]
   },
   {
-    id: 2,
-    nombre: 'Sala B - Recuperacion',
-    tipo: 'Recuperacion',
-    ocupada: false,
-    centro: { nombre: 'Centro Pokemon Pueblo Paleta' },
-    pacientes: []
-  },
-  {
-    id: 3,
-    nombre: 'Sala C - Observacion',
-    tipo: 'Observacion',
+    id: 4,
+    nombre: 'Sala Critico B',
+    tipo: 'Urgencias',
     ocupada: false,
     centro: { nombre: 'Centro Pokemon Pueblo Paleta' },
     pacientes: []
@@ -41,7 +50,6 @@ const POKEMON_MAQUETA = [
   { id: 4, nombre: 'snorlax', especie: 'Snorlax', tipo: 'Normal', nivel: 50, estadoSalud: 'sano', internado: false }
 ];
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
 async function cargarDatos() {
   try {
     const [resSalas, resPokemon] = await Promise.all([
@@ -63,10 +71,12 @@ async function cargarDatos() {
   poblarSelectores();
 }
 
-// ─── STATS ───────────────────────────────────────────────────────────────────
 function actualizarStats() {
   const total = todasLasSalas.length;
-  const libres = todasLasSalas.filter(s => !s.ocupada).length;
+  const libres = todasLasSalas.filter(s => {
+    const cant = s.pacientes ? s.pacientes.length : 0;
+    return cant < 3;
+  }).length;
   const internados = todasLasSalas.reduce((acc, s) => acc + (s.pacientes ? s.pacientes.length : 0), 0);
 
   document.getElementById('stat-salas-total').textContent = total;
@@ -74,7 +84,6 @@ function actualizarStats() {
   document.getElementById('stat-internados').textContent = internados;
 }
 
-// ─── VISTAS ───────────────────────────────────────────────────────────────────
 function cambiarVista(vista, btn) {
   vistaActiva = vista;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -89,7 +98,6 @@ function renderVista() {
   else renderListaInternados();
 }
 
-// ─── RENDER SALAS ─────────────────────────────────────────────────────────────
 function renderSalas() {
   const grid = document.getElementById('salas-grid');
 
@@ -105,9 +113,10 @@ function renderSalas() {
 
   grid.innerHTML = todasLasSalas.map(sala => {
     const pacientes = sala.pacientes || [];
-    const ocupada = pacientes.length > 0 || sala.ocupada;
+    const cantidadPacientes = pacientes.length;
+    const estaLlena = cantidadPacientes >= 3;
 
-    const pacientesHTML = pacientes.length > 0
+    const pacientesHTML = cantidadPacientes > 0
       ? `<ul class="sala-pacientes">
           ${pacientes.map(p => {
             const pokeId = getPokeId(p.nombre);
@@ -129,21 +138,31 @@ function renderSalas() {
         </ul>`
       : `<p style="font-size: 0.82rem; color: var(--gris-texto); padding: 8px 0;">Sala disponible. Sin pacientes.</p>`;
 
+    let estadoClase = 'estado-sano';
+    let estadoTexto = 'Disponible';
+    if (estaLlena) {
+      estadoClase = 'estado-critico';
+      estadoTexto = 'Llena';
+    } else if (cantidadPacientes > 0) {
+      estadoClase = 'estado-internado';
+      estadoTexto = 'Ocupada';
+    }
+
     return `
-      <div class="sala-card ${ocupada ? 'ocupada' : ''}">
+      <div class="sala-card ${estaLlena ? 'ocupada' : ''}">
         <div class="sala-header">
           <span class="sala-nombre">${sala.nombre}</span>
           <span class="sala-tipo">${sala.tipo}</span>
         </div>
         <div style="margin-bottom: 10px;">
-          <span class="estado-badge ${ocupada ? 'estado-critico' : 'estado-sano'}">
-            ${ocupada ? 'Ocupada' : 'Libre'}
+          <span class="estado-badge ${estadoClase}">
+            ${estadoTexto} (${cantidadPacientes}/3)
           </span>
           ${sala.centro ? `<span style="font-size: 0.75rem; color: var(--gris-texto); margin-left: 8px;">${sala.centro.nombre}</span>` : ''}
         </div>
         ${pacientesHTML}
         ${pacientes.length > 0 ? `
-          <div style="margin-top: 12px; display: flex; gap: 8px;">
+          <div style="margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap;">
             ${pacientes.map(p => `
               <button class="btn btn-sm btn-success" onclick="darDeAlta(${p.id}, '${p.nombre}', ${sala.id})">
                 Alta: ${capitalize(p.nombre)}
@@ -156,7 +175,6 @@ function renderSalas() {
   }).join('');
 }
 
-// ─── RENDER LISTA INTERNADOS ──────────────────────────────────────────────────
 function renderListaInternados() {
   const wrapper = document.getElementById('tabla-internados');
   const lista = todasLasSalas.flatMap(s =>
@@ -224,7 +242,6 @@ function renderListaInternados() {
   `;
 }
 
-// ─── DAR DE ALTA ─────────────────────────────────────────────────────────────
 async function darDeAlta(id, nombre, salaId) {
   if (!confirm(`Dar de alta a ${capitalize(nombre)}? Sera marcado como sano y dejara la sala.`)) return;
 
@@ -242,10 +259,8 @@ async function darDeAlta(id, nombre, salaId) {
       });
     }
   } catch {
-    // Maqueta
   }
 
-  // Actualizar localmente
   todasLasSalas = todasLasSalas.map(s => ({
     ...s,
     pacientes: (s.pacientes || []).filter(p => p.id !== id),
@@ -257,14 +272,12 @@ async function darDeAlta(id, nombre, salaId) {
   mostrarToast(`${capitalize(nombre)} fue dado de alta exitosamente.`);
 }
 
-// ─── ELIMINAR INTERNADO ───────────────────────────────────────────────────────
 async function eliminarInternado(id, nombre) {
   if (!confirm(`Eliminar a ${capitalize(nombre)} del sistema? Esta accion no se puede deshacer.`)) return;
 
   try {
     await fetch(`${API}/pokemon/${id}`, { method: 'DELETE' });
   } catch {
-    // Maqueta
   }
 
   todasLasSalas = todasLasSalas.map(s => ({
@@ -277,7 +290,6 @@ async function eliminarInternado(id, nombre) {
   mostrarToast(`${capitalize(nombre)} eliminado del sistema.`);
 }
 
-// ─── MODAL INTERNAR ──────────────────────────────────────────────────────────
 function abrirModalSala() {
   document.getElementById('modal-sala').classList.add('visible');
 }
@@ -286,21 +298,39 @@ function cerrarModalSala() {
   document.getElementById('modal-sala').classList.remove('visible');
 }
 
+const selPokemon = document.getElementById('sala-pokemon-select');
+selPokemon.addEventListener('change', () => {
+  const pId = parseInt(selPokemon.value);
+  const pokemon = todosLosPokemones.find(p => p.id === pId);
+  poblarSalasDestino(pokemon);
+});
+
 function poblarSelectores() {
-  // Pokemon disponibles (no internados)
-  const selPokemon = document.getElementById('sala-pokemon-select');
   const disponibles = todosLosPokemones.filter(p => !p.internado);
   selPokemon.innerHTML = '<option value="">Selecciona un pokemon...</option>';
   disponibles.forEach(p => {
     selPokemon.innerHTML += `<option value="${p.id}">${capitalize(p.nombre)} (Lv.${p.nivel})</option>`;
   });
 
-  // Salas disponibles
   const selSala = document.getElementById('sala-destino-select');
-  const salasLibres = todasLasSalas.filter(s => !s.ocupada);
+  selSala.innerHTML = '<option value="">Selecciona un pokemon primero...</option>';
+}
+
+function poblarSalasDestino(pokemon) {
+  const selSala = document.getElementById('sala-destino-select');
   selSala.innerHTML = '<option value="">Selecciona una sala...</option>';
-  salasLibres.forEach(s => {
-    selSala.innerHTML += `<option value="${s.id}">${s.nombre} - ${s.tipo}</option>`;
+  if (!pokemon) return;
+
+  const esCritico = pokemon.estadoSalud === 'critico';
+  const tipoRequerido = esCritico ? 'Urgencias' : 'Normal';
+  const salasFiltradas = todasLasSalas.filter(s => s.tipo === tipoRequerido);
+
+  salasFiltradas.forEach(s => {
+    const cantidadPacientes = s.pacientes ? s.pacientes.length : 0;
+    const estaLlena = cantidadPacientes >= 3;
+    const textoCapacidad = ` (${cantidadPacientes}/3)`;
+    const sufijo = estaLlena ? ' [LLENA]' : '';
+    selSala.innerHTML += `<option value="${s.id}" ${estaLlena ? 'disabled' : ''}>${s.nombre}${textoCapacidad}${sufijo}</option>`;
   });
 }
 
@@ -324,10 +354,8 @@ async function internarPokemon() {
       body: JSON.stringify({ ocupada: true })
     });
   } catch {
-    // Maqueta
   }
 
-  // Actualizar localmente
   const pokemon = todosLosPokemones.find(p => p.id === pokemonId);
   if (pokemon) {
     pokemon.internado = true;
@@ -347,7 +375,6 @@ async function internarPokemon() {
   mostrarToast(`Pokemon internado en sala correctamente.`);
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function getPokeId(nombre) {
   const mapa = {
     pikachu: 25, charizard: 6, mewtwo: 150, snorlax: 143,
@@ -375,5 +402,4 @@ function mostrarToast(msg, error = false) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ─── INICIAR ──────────────────────────────────────────────────────────────────
 cargarDatos();

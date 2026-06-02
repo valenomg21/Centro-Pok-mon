@@ -48,11 +48,13 @@ model PokemonPaciente {
   nivel          Int
   estadoSalud    String
   internado      Boolean  @default(true)
+  shiny          Boolean  @default(false)
+  efecto         String   @default("ninguno")
   fechaIngreso   DateTime @default(now())
   createdAt      DateTime @default(now())
 
-  entrenadorId Int
-  entrenador   Entrenador @relation(fields: [entrenadorId], references: [id])
+  entrenadorId Int?
+  entrenador   Entrenador? @relation(fields: [entrenadorId], references: [id])
 
   salaId Int
   sala   Sala @relation(fields: [salaId], references: [id])

@@ -1,6 +1,5 @@
-const prisma = require('../config/prisma');
+const prisma = require('../config/prisma')
 
-// --- LECTURA (GET) ---
 const obtenerPacientes = async (req, res) => {
   try {
     const pacientes = await prisma.pokemonPaciente.findMany({
@@ -8,20 +7,19 @@ const obtenerPacientes = async (req, res) => {
         entrenador: true, 
         sala: true
       }
-    });
-    res.json(pacientes);
+    })
+    res.json(pacientes)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al obtener los pacientes' });
+    console.error(error)
+    res.status(500).json({ error: 'Error al obtener los pacientes' })
   }
-};
+}
 
-// --- ESCRITURA (POST) ---
 const crearPaciente = async (req, res) => {
   try {
-    const { nombre, especie, tipo, nivel, estadoSalud, internado, entrenadorId, salaId } = req.body;
+    const { nombre, especie, tipo, nivel, estadoSalud, internado, shiny, efecto, entrenadorId, salaId } = req.body
     
-const nuevoPaciente = await prisma.pokemonPaciente.create({
+    const nuevoPaciente = await prisma.pokemonPaciente.create({
       data: {
         nombre: nombre,
         especie: especie,
@@ -29,53 +27,64 @@ const nuevoPaciente = await prisma.pokemonPaciente.create({
         nivel: Number(nivel),
         estadoSalud: estadoSalud,
         internado: internado !== undefined ? (internado === true || internado === 'true') : true,
-        
-        // 1. Conectamos con la Sala Médica (Obligatorio)
+        shiny: shiny !== undefined ? (shiny === true || shiny === 'true') : false,
+        efecto: efecto || 'ninguno',
         sala: {
           connect: { id: Number(salaId) }
         },
-
-        // 2. Conectamos con el Entrenador SOLO si nos enviaron un ID
-        // Si no viene, no ponemos el objeto 'connect' para que quede en null (Salvaje)
         ...(entrenadorId && {
           entrenador: {
             connect: { id: Number(entrenadorId) }
           }
         })
       }
-    });
-    res.status(201).json(nuevoPaciente);
+    })
+    res.status(201).json(nuevoPaciente)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al registrar el Pokémon paciente' });
+    console.error(error)
+    res.status(500).json({ error: 'Error al registrar el Pokémon paciente' })
   }
-};
+}
 
-// --- MODIFICACIÓN (PUT) ---
 const actualizarPaciente = async (req, res) => {
   try {
-    const { id } = req.params;
-    const datosActualizados = req.body;
+    const { id } = req.params
+    const datosActualizados = req.body
 
-    // Conversiones de seguridad asegurando que los IDs y niveles sean números
-    if (datosActualizados.nivel) datosActualizados.nivel = Number(datosActualizados.nivel);
-    if (datosActualizados.entrenadorId) datosActualizados.entrenadorId = Number(datosActualizados.entrenadorId);
-    if (datosActualizados.salaId) datosActualizados.salaId = Number(datosActualizados.salaId);
+    if (datosActualizados.nivel) datosActualizados.nivel = Number(datosActualizados.nivel)
+    if (datosActualizados.entrenadorId) datosActualizados.entrenadorId = Number(datosActualizados.entrenadorId)
+    if (datosActualizados.salaId) datosActualizados.salaId = Number(datosActualizados.salaId)
+    if (datosActualizados.internado !== undefined) datosActualizados.internado = (datosActualizados.internado === true || datosActualizados.internado === 'true')
+    if (datosActualizados.shiny !== undefined) datosActualizados.shiny = (datosActualizados.shiny === true || datosActualizados.shiny === 'true')
 
     const pacienteEditado = await prisma.pokemonPaciente.update({
       where: { id: Number(id) },
       data: datosActualizados
-    });
+    })
     
-    res.json(pacienteEditado);
+    res.json(pacienteEditado)
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error al actualizar los datos del paciente' });
+    console.error(error)
+    res.status(500).json({ error: 'Error al actualizar los datos del paciente' })
   }
-};
+}
+
+const eliminarPaciente = async (req, res) => {
+  try {
+    const { id } = req.params
+    await prisma.pokemonPaciente.delete({
+      where: { id: Number(id) }
+    })
+    res.json({ mensaje: 'Paciente eliminado' })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error al eliminar el paciente' })
+  }
+}
 
 module.exports = {
   obtenerPacientes,
   crearPaciente,
-  actualizarPaciente
-};
+  actualizarPaciente,
+  eliminarPaciente
+}

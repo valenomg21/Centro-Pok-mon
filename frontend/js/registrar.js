@@ -1,6 +1,5 @@
 const API = 'http://localhost:3000';
 
-// ─── POKEAPI ───────────────────────────────────────────────────────────────
 let debounceTimer;
 let pokemonDataCache = null;
 
@@ -32,9 +31,7 @@ async function buscarPokemon(nombre) {
     const data = await res.json();
     pokemonDataCache = data;
 
-    // Imagen oficial
-    const img = data.sprites.other['official-artwork'].front_default
-      || data.sprites.front_default;
+    const img = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
 
     pokemonImg.src = img;
     pokemonImg.style.width = '140px';
@@ -42,14 +39,12 @@ async function buscarPokemon(nombre) {
     previewNombre.textContent = capitalize(data.name);
     previewNombre.style.color = 'var(--negro)';
 
-    // Tipos
     const tipos = data.types.map(t => t.type.name);
     previewTipos.innerHTML = tipos.map(t =>
       `<span class="type-badge type-${t}">${traducirTipo(t)}</span>`
     ).join('');
     previewTipo.textContent = '';
 
-    // Autocompletar tipo en formulario
     document.getElementById('input-tipo').value = tipos.map(traducirTipo).join(' / ');
     if (!document.getElementById('input-especie').value) {
       document.getElementById('input-especie').value = capitalize(data.species.name);
@@ -71,14 +66,12 @@ function resetPreview() {
   document.getElementById('input-tipo').value = '';
 }
 
-// ─── NIVEL SLIDER ───────────────────────────────────────────────────────────
 const inputNivel = document.getElementById('input-nivel');
 const nivelValor = document.getElementById('nivel-valor');
 inputNivel.addEventListener('input', () => {
   nivelValor.textContent = inputNivel.value;
 });
 
-// ─── SHINY TOGGLE ──────────────────────────────────────────────────────────
 const shinyToggle = document.getElementById('shiny-toggle');
 const inputShiny = document.getElementById('input-shiny');
 const shinyTexto = document.getElementById('shiny-texto');
@@ -90,10 +83,8 @@ shinyToggle.addEventListener('click', () => {
     shinyToggle.classList.add('active');
     shinyTexto.textContent = 'Es shiny!';
     previewShiny.style.display = 'block';
-    // Cargar sprite shiny si hay pokemon
     if (pokemonDataCache) {
-      const shinyImg = pokemonDataCache.sprites.other['official-artwork'].front_shiny
-        || pokemonDataCache.sprites.front_shiny;
+      const shinyImg = pokemonDataCache.sprites.other['official-artwork'].front_shiny || pokemonDataCache.sprites.front_shiny;
       if (shinyImg) pokemonImg.src = shinyImg;
     }
   } else {
@@ -101,14 +92,30 @@ shinyToggle.addEventListener('click', () => {
     shinyTexto.textContent = 'No es shiny';
     previewShiny.style.display = 'none';
     if (pokemonDataCache) {
-      const normalImg = pokemonDataCache.sprites.other['official-artwork'].front_default
-        || pokemonDataCache.sprites.front_default;
+      const normalImg = pokemonDataCache.sprites.other['official-artwork'].front_default || pokemonDataCache.sprites.front_default;
       pokemonImg.src = normalImg;
     }
   }
 });
 
-// ─── ESTADO CRITICO ─────────────────────────────────────────────────────────
+const salvajeToggle = document.getElementById('salvaje-toggle');
+const inputSalvaje = document.getElementById('input-salvaje');
+const salvajeTexto = document.getElementById('salvaje-texto');
+const grupoEntrenador = document.getElementById('grupo-entrenador');
+
+salvajeToggle.addEventListener('click', () => {
+  inputSalvaje.checked = !inputSalvaje.checked;
+  if (inputSalvaje.checked) {
+    salvajeToggle.classList.add('active');
+    salvajeTexto.textContent = 'Es salvaje!';
+    grupoEntrenador.style.display = 'none';
+  } else {
+    salvajeToggle.classList.remove('active');
+    salvajeTexto.textContent = 'No es salvaje';
+    grupoEntrenador.style.display = 'block';
+  }
+});
+
 const inputCritico = document.getElementById('input-critico');
 const panelCritico = document.getElementById('panel-critico');
 const inputEstado = document.getElementById('input-estado');
@@ -133,9 +140,7 @@ inputEstado.addEventListener('change', () => {
   }
 });
 
-// ─── CARGAR ENTRENADORES Y SALAS ────────────────────────────────────────────
 async function cargarSelectores() {
-  // Entrenadores
   try {
     const res = await fetch(`${API}/entrenadores`);
     const entrenadores = await res.json();
@@ -145,11 +150,9 @@ async function cargarSelectores() {
       sel.innerHTML += `<option value="${e.id}">${e.nombre} (${e.region})</option>`;
     });
   } catch {
-    document.getElementById('input-entrenador').innerHTML =
-      '<option value="">Backend no disponible</option>';
+    document.getElementById('input-entrenador').innerHTML = '<option value="">Backend no disponible</option>';
   }
 
-  // Salas
   try {
     const res = await fetch(`${API}/salas`);
     const salas = await res.json();
@@ -160,14 +163,12 @@ async function cargarSelectores() {
       sel.innerHTML += `<option value="${s.id}" ${s.ocupada ? 'disabled' : ''}>${s.nombre} - ${s.tipo}${disponible}</option>`;
     });
   } catch {
-    document.getElementById('input-sala').innerHTML =
-      '<option value="">Backend no disponible</option>';
+    document.getElementById('input-sala').innerHTML = '<option value="">Backend no disponible</option>';
   }
 }
 
 cargarSelectores();
 
-// ─── REGISTRAR POKEMON ──────────────────────────────────────────────────────
 async function registrarPokemon() {
   const nombre = inputNombre.value.trim();
   const especie = document.getElementById('input-especie').value.trim();
@@ -176,15 +177,16 @@ async function registrarPokemon() {
   const estadoSalud = inputEstado.value;
   const efecto = document.getElementById('input-efecto').value;
   const shiny = inputShiny.checked;
+  const salvaje = inputSalvaje.checked;
   const critico = inputCritico.checked;
-  const entrenadorId = parseInt(document.getElementById('input-entrenador').value);
+  const entrenadorIdRaw = document.getElementById('input-entrenador').value;
   const salaId = parseInt(document.getElementById('input-sala').value);
 
   if (!nombre || !especie || !tipo) {
     mostrarToast('Completa el nombre, especie y tipo del pokemon.', true);
     return;
   }
-  if (!entrenadorId) {
+  if (!salvaje && !entrenadorIdRaw) {
     mostrarToast('Selecciona un entrenador.', true);
     return;
   }
@@ -192,6 +194,8 @@ async function registrarPokemon() {
     mostrarToast('Selecciona una sala.', true);
     return;
   }
+
+  const entrenadorId = salvaje ? null : parseInt(entrenadorIdRaw);
 
   const payload = {
     nombre,
@@ -225,7 +229,6 @@ async function registrarPokemon() {
       setTimeout(limpiarFormulario, 1800);
     }
   } catch {
-    // Maqueta: simular exito cuando el backend no esta disponible
     mostrarToast(`[MAQUETA] ${capitalize(nombre)} seria registrado. Backend no disponible.`);
     if (critico) {
       setTimeout(() => { window.location.href = 'salas.html'; }, 1800);
@@ -233,7 +236,6 @@ async function registrarPokemon() {
   }
 }
 
-// ─── LIMPIAR ────────────────────────────────────────────────────────────────
 function limpiarFormulario() {
   inputNombre.value = '';
   document.getElementById('input-especie').value = '';
@@ -244,15 +246,18 @@ function limpiarFormulario() {
   document.getElementById('input-efecto').value = 'ninguno';
   inputShiny.checked = false;
   inputCritico.checked = false;
+  inputSalvaje.checked = false;
   shinyToggle.classList.remove('active');
   shinyTexto.textContent = 'No es shiny';
+  salvajeToggle.classList.remove('active');
+  salvajeTexto.textContent = 'No es salvaje';
+  grupoEntrenador.style.display = 'block';
   previewShiny.style.display = 'none';
   panelCritico.style.display = 'none';
   pokemonDataCache = null;
   resetPreview();
 }
 
-// ─── HELPERS ────────────────────────────────────────────────────────────────
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }

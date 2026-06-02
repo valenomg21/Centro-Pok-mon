@@ -110,14 +110,23 @@
           </div>
 
           <!-- Entrenador -->
-          <div class="form-group">
+          <div class="form-group span-2">
+            <label>Es Salvaje?</label>
+            <div class="shiny-toggle" id="salvaje-toggle">
+              <input type="checkbox" id="input-salvaje" />
+              <label class="shiny-toggle-label" for="input-salvaje">
+                <span id="salvaje-texto">No es salvaje</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group" id="grupo-entrenador">
             <label>Entrenador</label>
             <select id="input-entrenador" class="form-control">
               <option value="">Cargando...</option>
             </select>
           </div>
 
-          <!-- Sala -->
           <div class="form-group">
             <label>Sala asignada</label>
             <select id="input-sala" class="form-control">
@@ -125,7 +134,6 @@
             </select>
           </div>
 
-          <!-- Shiny -->
           <div class="form-group span-2">
             <label>Es Shiny?</label>
             <div class="shiny-toggle" id="shiny-toggle">
@@ -172,7 +180,7 @@
             id="pokemon-img"
             src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
             alt="Pokemon"
-            style="width: 80px; opacity: 0.3;"
+            style=" opacity: 0.3;"
           />
           <h3 id="preview-nombre" style="color: var(--gris-texto);">Esperando nombre...</h3>
           <p id="preview-tipo">Tipo: --</p>

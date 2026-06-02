@@ -3,7 +3,6 @@ const API = 'http://localhost:3000';
 let todosLosPokemones = [];
 let filtroActivo = 'todos';
 
-// ─── DATOS MAQUETA (para cuando el backend no esta levantado) ───────────────
 const MAQUETA = [
   {
     id: 1,
@@ -15,7 +14,8 @@ const MAQUETA = [
     internado: false,
     shiny: false,
     efecto: 'ninguno',
-    entrenador: { nombre: 'Ash' }
+    entrenador: { nombre: 'Ash' },
+    entrenadorId: 1
   },
   {
     id: 2,
@@ -27,7 +27,8 @@ const MAQUETA = [
     internado: false,
     shiny: false,
     efecto: 'quemado',
-    entrenador: { nombre: 'Ash' }
+    entrenador: { nombre: 'Ash' },
+    entrenadorId: 1
   },
   {
     id: 3,
@@ -39,7 +40,8 @@ const MAQUETA = [
     internado: true,
     shiny: true,
     efecto: 'confundido',
-    entrenador: { nombre: 'Giovanni' }
+    entrenador: { nombre: 'Giovanni' },
+    entrenadorId: 2
   },
   {
     id: 4,
@@ -51,25 +53,23 @@ const MAQUETA = [
     internado: false,
     shiny: false,
     efecto: 'dormido',
-    entrenador: { nombre: 'Brock' }
+    entrenador: { nombre: 'Brock' },
+    entrenadorId: 3
   }
 ];
 
-// ─── INIT ───────────────────────────────────────────────────────────────────
 async function cargarPokemones() {
   try {
     const res = await fetch(`${API}/pokemon`);
     if (!res.ok) throw new Error();
     todosLosPokemones = await res.json();
   } catch {
-    // Usar maqueta si el backend no responde
     todosLosPokemones = MAQUETA;
     mostrarToast('Modo maqueta activo. Backend no disponible.', true);
   }
   renderTabla();
 }
 
-// ─── FILTRO ─────────────────────────────────────────────────────────────────
 function filtrarPor(filtro, btn) {
   filtroActivo = filtro;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -110,9 +110,8 @@ function renderTabla() {
     const shinyMarca = p.shiny
       ? '<span class="shiny-icon" title="Shiny"></span>'
       : '<span style="color: var(--gris-medio);">-</span>';
-    const entrenadorNombre = p.entrenador ? p.entrenador.nombre : (p.entrenadorId || '-');
+    const entrenadorNombre = p.entrenador ? p.entrenador.nombre : 'Salvaje';
 
-    // Botones segun estado
     let acciones = '';
     if (p.estadoSalud === 'critico' || p.internado) {
       acciones = `
@@ -179,7 +178,32 @@ function renderTabla() {
   `;
 }
 
-// ─── CURAR POKEMON ──────────────────────────────────────────────────────────
+function calcularTarifa(pokemon) {
+  let base = 0;
+  if (pokemon.estadoSalud === 'debil') base = 50;
+  else if (pokemon.estadoSalud === 'herido') base = 100;
+  else if (pokemon.estadoSalud === 'grave') base = 250;
+  else if (pokemon.estadoSalud === 'critico') base = 600;
+  else base = 20;
+
+  let extraEfecto = 0;
+  if (pokemon.efecto === 'envenenado') extraEfecto = 80;
+  else if (pokemon.efecto === 'paralizado') extraEfecto = 60;
+  else if (pokemon.efecto === 'quemado') extraEfecto = 90;
+  else if (pokemon.efecto === 'dormido') extraEfecto = 40;
+  else if (pokemon.efecto === 'congelado') extraEfecto = 120;
+  else if (pokemon.efecto === 'confundido') extraEfecto = 50;
+  else extraEfecto = 0;
+
+  let total = base + extraEfecto;
+  if (pokemon.shiny) total = Math.round(total * 1.25);
+
+  const esSalvaje = pokemon.entrenadorId === null || !pokemon.entrenador;
+  if (esSalvaje) total = 0;
+
+  return { base, extraEfecto, total, esSalvaje };
+}
+
 function iniciarCura(id, nombre) {
   const overlay = document.getElementById('modal-curar');
   const barraFill = document.getElementById('barra-fill');
@@ -188,7 +212,9 @@ function iniciarCura(id, nombre) {
   const modalBtn = document.getElementById('modal-btn-ok');
   const modalImg = document.getElementById('modal-pokemon-img');
 
-  // Sprite del pokemon
+  const pokemon = todosLosPokemones.find(p => p.id === id);
+  const tarifa = calcularTarifa(pokemon);
+
   const pokeId = getPokeId(nombre);
   modalImg.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokeId}.png`;
 
@@ -199,7 +225,6 @@ function iniciarCura(id, nombre) {
 
   overlay.classList.add('visible');
 
-  // Reproducir musica
   const audio = document.getElementById('audio-cura');
   if (audio) {
     audio.currentTime = 0;
@@ -207,10 +232,8 @@ function iniciarCura(id, nombre) {
     audio.play().catch(() => {});
   }
 
-  // Animar barra
   setTimeout(() => { barraFill.style.width = '100%'; }, 100);
 
-  // Llamar API despues de 3s (duracion de la barra)
   setTimeout(async () => {
     try {
       const res = await fetch(`${API}/pokemon/${id}`, {
@@ -220,14 +243,12 @@ function iniciarCura(id, nombre) {
       });
       if (!res.ok) throw new Error();
 
-      // Actualizar localmente
       const idx = todosLosPokemones.findIndex(p => p.id === id);
       if (idx !== -1) {
         todosLosPokemones[idx].estadoSalud = 'sano';
         todosLosPokemones[idx].efecto = 'ninguno';
       }
     } catch {
-      // Maqueta: igual mostrar como curado
       const idx = todosLosPokemones.findIndex(p => p.id === id);
       if (idx !== -1) {
         todosLosPokemones[idx].estadoSalud = 'sano';
@@ -236,8 +257,27 @@ function iniciarCura(id, nombre) {
     }
 
     if (audio) audio.pause();
-    modalTitulo.textContent = `${capitalize(nombre)} esta sano!`;
-    modalTexto.textContent = 'Gracias por confiar en el Centro Pokemon.';
+    modalTitulo.textContent = `${capitalize(nombre)} esta curado!`;
+
+    if (tarifa.esSalvaje) {
+      modalTexto.innerHTML = `
+        El tratamiento fue completamente gratis.<br/>
+        <span style="font-weight: 800; color: var(--verde-sano);">¡Descuento del 100% por ser Pokemon Salvaje!</span>
+      `;
+    } else {
+      modalTexto.innerHTML = `
+        <div style="text-align: left; margin: 0 auto; max-width: 280px; font-size: 0.82rem; background: var(--gris-claro); padding: 10px; border-radius: 8px;">
+          <strong>Detalle de Factura:</strong><br/>
+          • Base de consulta: $${tarifa.base} Pokedolares<br/>
+          • Tratamiento de ${pokemon.efecto}: $${tarifa.extraEfecto} Pokedolares<br/>
+          ${pokemon.shiny ? '• Recargo de medicina Shiny (+25%)<br/>' : ''}
+          <div style="border-top: 1px solid var(--gris-medio); margin-top: 6px; padding-top: 6px; font-weight: 800; font-size: 0.9rem; color: var(--rosa-oscuro);">
+            Total Cobrado: $${tarifa.total} Pokedolares
+          </div>
+        </div>
+      `;
+    }
+
     modalBtn.style.display = 'block';
     renderTabla();
   }, 3200);
@@ -247,7 +287,6 @@ function cerrarModal() {
   document.getElementById('modal-curar').classList.remove('visible');
 }
 
-// ─── EDITAR POKEMON ─────────────────────────────────────────────────────────
 function abrirEditar(jsonStr) {
   const p = JSON.parse(jsonStr);
   document.getElementById('edit-id').value = p.id;
@@ -280,7 +319,6 @@ async function guardarEdicion() {
     });
     if (!res.ok) throw new Error();
   } catch {
-    // Maqueta
   }
 
   const idx = todosLosPokemones.findIndex(p => p.id === id);
@@ -296,7 +334,6 @@ async function guardarEdicion() {
   mostrarToast('Pokemon actualizado correctamente.');
 }
 
-// ─── ELIMINAR POKEMON ────────────────────────────────────────────────────────
 async function eliminarPokemon(id, nombre) {
   if (!confirm(`Seguro que queres eliminar a ${capitalize(nombre)} del sistema?`)) return;
 
@@ -304,7 +341,6 @@ async function eliminarPokemon(id, nombre) {
     const res = await fetch(`${API}/pokemon/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error();
   } catch {
-    // Maqueta
   }
 
   todosLosPokemones = todosLosPokemones.filter(p => p.id !== id);
@@ -312,16 +348,14 @@ async function eliminarPokemon(id, nombre) {
   mostrarToast(`${capitalize(nombre)} fue dado de alta del sistema.`);
 }
 
-// ─── HELPERS ─────────────────────────────────────────────────────────────────
 function getPokeId(nombre) {
-  // Mapa basico para maqueta
   const mapa = {
     pikachu: 25, charizard: 6, mewtwo: 150, snorlax: 143,
     bulbasaur: 1, charmander: 4, squirtle: 7, gengar: 94,
     eevee: 133, gyarados: 130, lapras: 131, dragonite: 149,
     alakazam: 65, machamp: 68, golem: 76, arcanine: 59
   };
-  return mapa[nombre.toLowerCase()] || 132; // 132 = Ditto como fallback
+  return mapa[nombre.toLowerCase()] || 132;
 }
 
 function getEstadoBadge(estado, internado) {
@@ -358,5 +392,4 @@ function mostrarToast(msg, error = false) {
   setTimeout(() => toast.classList.remove('show'), 3500);
 }
 
-// ─── INICIAR ─────────────────────────────────────────────────────────────────
 cargarPokemones();

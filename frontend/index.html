@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html" class="navbar-brand">
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
@@ -22,19 +21,19 @@
         </a>
       </li>
       <li>
-        <a href="./js/registar.js">
+        <a href="registrar.html">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
           Registrar
         </a>
       </li>
       <li>
-        <a href="./js/curar.js">
+        <a href="curar.html">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/full-restore.png" alt="" />
           Curar
         </a>
       </li>
       <li>
-        <a href="./js/salas.js">
+        <a href="salas.html">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
           Internacion
         </a>
@@ -42,7 +41,6 @@
     </ul>
   </nav>
 
-  <!-- HERO -->
   <section class="hero">
     <div class="hero-text">
       <div class="hero-badge">SISTEMA DE GESTION - ENFERMERA JOY</div>
@@ -63,7 +61,6 @@
     </div>
 
     <div class="hero-image">
-      <!-- Sprite oficial de Enfermera Joy desde PokeAPI -->
       <img
         src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/39.png"
         alt="Enfermera Joy"
@@ -73,7 +70,6 @@
     </div>
   </section>
 
-  <!-- ESTADISTICAS RAPIDAS -->
   <section class="page-container">
     <div class="stats-row" id="stats-row">
       <div class="stat-card">
@@ -106,7 +102,6 @@
       </div>
     </div>
 
-    <!-- NAVEGACION RAPIDA -->
     <div class="hero-cards">
       <a href="registrar.html" class="nav-card">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
@@ -150,7 +145,6 @@
         document.getElementById('stat-criticos').textContent = criticos;
         document.getElementById('stat-internados').textContent = internados;
       } catch {
-        // Si el backend no esta levantado aun, mostrar maqueta
         document.getElementById('stat-total').textContent = '0';
         document.getElementById('stat-sanos').textContent = '0';
         document.getElementById('stat-criticos').textContent = '0';

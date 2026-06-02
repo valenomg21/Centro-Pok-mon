@@ -873,7 +873,6 @@ input:checked + .slider:before {
 }
 
 .empty-state img {
-  width: 80px;
   opacity: 0.4;
   margin-bottom: 1rem;
 }
