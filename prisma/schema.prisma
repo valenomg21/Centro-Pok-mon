@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model CentroPokemon {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  ciudad     String
+  capacidad  Int
+  createdAt  DateTime @default(now())
+
+  salas Sala[]
+}
+
+model Sala {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  tipo       String
+  ocupada    Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  centroId Int
+  centro   CentroPokemon @relation(fields: [centroId], references: [id])
+
+  pacientes PokemonPaciente[]
+}
+
+model Entrenador {
+  id         Int      @id @default(autoincrement())
+  nombre     String
+  edad       Int
+  region     String
+  createdAt  DateTime @default(now())
+
+  pokemon PokemonPaciente[]
+}
+
+model PokemonPaciente {
+  id             Int      @id @default(autoincrement())
+  nombre         String
+  especie        String
+  tipo           String
+  nivel          Int
+  estadoSalud    String
+  internado      Boolean  @default(true)
+  fechaIngreso   DateTime @default(now())
+  createdAt      DateTime @default(now())
+
+  entrenadorId Int
+  entrenador   Entrenador @relation(fields: [entrenadorId], references: [id])
+
+  salaId Int
+  sala   Sala @relation(fields: [salaId], references: [id])
+}
