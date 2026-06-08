@@ -1,0 +1,73 @@
+.navbar {
+  background: var(--blanco);
+  border-bottom: 3px solid var(--rosa-joy);
+  padding: 0 2rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(232, 101, 154, 0.12);
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.navbar-brand img {
+  width: 36px;
+  height: 36px;
+}
+
+.navbar-brand span {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.65rem;
+  color: var(--rosa-oscuro);
+  line-height: 1.4;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+}
+
+.navbar-nav a {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--gris-texto);
+  padding: 8px 16px;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transicion);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.navbar-nav a:hover,
+.navbar-nav a.active {
+  background: var(--rosa-suave);
+  color: var(--rosa-oscuro);
+}
+
+.navbar-nav a img {
+  width: 18px;
+  height: 18px;
+}
+
+footer {
+  text-align: center;
+  padding: 2rem;
+  margin-top: 4rem;
+  border-top: 2px solid var(--rosa-suave);
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  color: var(--rosa-joy);
+  line-height: 2;
+}

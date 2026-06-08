@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html" class="navbar-brand">
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
@@ -40,13 +39,11 @@
       <p>Complete los datos clinicos del paciente. La Enfermera Joy se encargara del resto.</p>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 300px; gap: 1.5rem; align-items: start;">
+    <div class="registration-grid">
 
-      <!-- FORMULARIO -->
       <div class="form-card">
         <div class="form-grid">
 
-          <!-- Nombre -->
           <div class="form-group span-2">
             <label>
               <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="" />
@@ -62,19 +59,16 @@
             <small id="buscar-hint" style="color: var(--gris-texto); font-size: 0.78rem;">Escribi el nombre en ingles para cargar la imagen automaticamente.</small>
           </div>
 
-          <!-- Especie -->
           <div class="form-group">
             <label>Especie</label>
             <input type="text" id="input-especie" class="form-control" placeholder="Ej: Pikachu" />
           </div>
 
-          <!-- Tipo (se autocompleta) -->
           <div class="form-group">
             <label>Tipo</label>
             <input type="text" id="input-tipo" class="form-control" placeholder="Se autocompleta..." readonly />
           </div>
 
-          <!-- Nivel -->
           <div class="form-group span-2">
             <label>Nivel</label>
             <div class="nivel-row">
@@ -83,7 +77,6 @@
             </div>
           </div>
 
-          <!-- Estado de salud -->
           <div class="form-group">
             <label>Estado de Salud</label>
             <select id="input-estado" class="form-control">
@@ -95,7 +88,6 @@
             </select>
           </div>
 
-          <!-- Efecto / Condicion -->
           <div class="form-group">
             <label>Condicion / Efecto</label>
             <select id="input-efecto" class="form-control">
@@ -109,7 +101,6 @@
             </select>
           </div>
 
-          <!-- Entrenador -->
           <div class="form-group span-2">
             <label>Es Salvaje?</label>
             <div class="shiny-toggle" id="salvaje-toggle">
@@ -145,7 +136,6 @@
             </div>
           </div>
 
-          <!-- ESTADO CRITICO TOGGLE -->
           <div class="form-group span-2">
             <div class="critico-toggle">
               <div class="critico-toggle-label">
@@ -173,25 +163,22 @@
         </div>
       </div>
 
-      <!-- PREVIEW -->
-      <div style="display: flex; flex-direction: column; gap: 1rem; position: sticky; top: 90px;">
+      <div class="preview-sticky-col">
         <div class="pokemon-preview" id="pokemon-preview">
           <img
             id="pokemon-img"
             src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
             alt="Pokemon"
-            style=" opacity: 0.3;"
           />
           <h3 id="preview-nombre" style="color: var(--gris-texto);">Esperando nombre...</h3>
           <p id="preview-tipo">Tipo: --</p>
           <div class="pokemon-types" id="preview-tipos"></div>
-          <div id="preview-shiny" style="display:none;">
+          <div id="preview-shiny" class="hidden">
             <span class="shiny-star" style="font-size: 1.4rem; color: var(--amarillo);">&#9733; SHINY</span>
           </div>
         </div>
 
-        <!-- Panel info critico -->
-        <div id="panel-critico" style="display:none; background: var(--rojo-suave); border: 2px solid var(--rojo-critico); border-radius: var(--border-radius); padding: 1.2rem; text-align: center;">
+        <div id="panel-critico" class="critico-panel hidden">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" style="width: 32px; margin-bottom: 8px;" />
           <p style="font-weight: 800; color: var(--rojo-critico); font-size: 0.85rem; margin-bottom: 6px;">ESTADO CRITICO</p>
           <p style="font-size: 0.8rem; color: var(--gris-texto);">Este pokemon sera enviado directamente a internacion despues del registro.</p>
@@ -205,7 +192,6 @@
     <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
   </footer>
 
-  <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
   <script src="js/registrar.js"></script>

@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html" class="navbar-brand">
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
@@ -46,8 +45,7 @@
       </button>
     </div>
 
-    <!-- STATS DE SALAS -->
-    <div class="stats-row" id="stats-salas" style="margin-bottom: 2rem;">
+    <div class="stats-row mb-2" id="stats-salas">
       <div class="stat-card">
         <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />
         <div class="stat-info">
@@ -71,21 +69,18 @@
       </div>
     </div>
 
-    <!-- TABS VISTA -->
-    <div class="tabs" style="margin-bottom: 1.5rem;">
+    <div class="tabs mb-1-5">
       <button class="tab-btn active" onclick="cambiarVista('salas', this)">Ver por Sala</button>
       <button class="tab-btn" onclick="cambiarVista('lista', this)">Lista de Internados</button>
     </div>
 
-    <!-- VISTA SALAS -->
     <div id="vista-salas">
       <div class="salas-grid" id="salas-grid">
         <div class="loading-spinner"></div>
       </div>
     </div>
 
-    <!-- VISTA LISTA -->
-    <div id="vista-lista" style="display:none;">
+    <div id="vista-lista" class="hidden">
       <div class="pokemon-table-wrapper" id="tabla-internados">
         <div class="loading-spinner"></div>
       </div>
@@ -97,29 +92,27 @@
     <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
   </footer>
 
-  <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- MODAL AGREGAR A SALA -->
   <div class="curar-modal-overlay" id="modal-sala">
-    <div class="curar-modal" style="text-align: left; max-width: 480px;">
-      <h2 style="margin-bottom: 1.5rem; text-align: center;">Internar Pokemon</h2>
+    <div class="curar-modal intern-modal">
+      <h2>Internar Pokemon</h2>
 
-      <div class="form-group" style="margin-bottom: 1rem;">
+      <div class="form-group mb-1">
         <label>Pokemon a internar</label>
         <select id="sala-pokemon-select" class="form-control">
           <option value="">Selecciona un pokemon...</option>
         </select>
       </div>
 
-      <div class="form-group" style="margin-bottom: 1rem;">
+      <div class="form-group mb-1">
         <label>Sala destino</label>
         <select id="sala-destino-select" class="form-control">
           <option value="">Selecciona una sala...</option>
         </select>
       </div>
 
-      <div class="form-group" style="margin-bottom: 1.5rem;">
+      <div class="form-group mb-1-5">
         <label>Motivo de internacion</label>
         <select id="sala-motivo" class="form-control">
           <option value="critico">Estado Critico</option>
@@ -129,7 +122,7 @@
         </select>
       </div>
 
-      <div style="display: flex; gap: 1rem; justify-content: flex-end;">
+      <div class="form-actions">
         <button class="btn btn-secondary" onclick="cerrarModalSala()">Cancelar</button>
         <button class="btn btn-danger" onclick="internarPokemon()">
           <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/max-revive.png" alt="" />

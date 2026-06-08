@@ -8,7 +8,6 @@
 </head>
 <body>
 
-  <!-- NAVBAR -->
   <nav class="navbar">
     <a href="index.html" class="navbar-brand">
       <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="Pokeball" />
@@ -40,8 +39,7 @@
       <p>Listado completo de pacientes del centro. Podes curar, editar o derivar a internacion.</p>
     </div>
 
-    <!-- FILTROS -->
-    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center;">
+    <div class="tabs mb-1-5">
       <div class="tabs">
         <button class="tab-btn active" onclick="filtrarPor('todos', this)">Todos</button>
         <button class="tab-btn" onclick="filtrarPor('sano', this)">Sanos</button>
@@ -51,14 +49,12 @@
       <input
         type="text"
         id="buscador"
-        class="form-control"
+        class="form-control search-input"
         placeholder="Buscar por nombre..."
-        style="max-width: 240px;"
         oninput="renderTabla()"
       />
     </div>
 
-    <!-- TABLA -->
     <div class="pokemon-table-wrapper" id="tabla-wrapper">
       <div class="loading-spinner"></div>
     </div>
@@ -69,10 +65,8 @@
     <p>CENTRO POKEMON - SISTEMA DE ENFERMERIA JOY</p>
   </footer>
 
-  <!-- TOAST -->
   <div class="toast" id="toast"></div>
 
-  <!-- MODAL CURAR -->
   <div class="curar-modal-overlay" id="modal-curar">
     <div class="curar-modal">
       <img
@@ -91,12 +85,11 @@
     </div>
   </div>
 
-  <!-- MODAL EDITAR -->
   <div class="curar-modal-overlay" id="modal-editar">
-    <div class="curar-modal" style="text-align: left; max-width: 500px;">
-      <h2 style="margin-bottom: 1rem;">Editar Pokemon</h2>
+    <div class="curar-modal curar-modal-edit">
+      <h2>Editar Pokemon</h2>
       <input type="hidden" id="edit-id" />
-      <div class="form-group" style="margin-bottom: 1rem;">
+      <div class="form-group mb-1">
         <label>Estado de Salud</label>
         <select id="edit-estado" class="form-control">
           <option value="sano">Sano</option>
@@ -106,7 +99,7 @@
           <option value="critico">Critico</option>
         </select>
       </div>
-      <div class="form-group" style="margin-bottom: 1rem;">
+      <div class="form-group mb-1">
         <label>Condicion / Efecto</label>
         <select id="edit-efecto" class="form-control">
           <option value="ninguno">Ninguno</option>
@@ -118,28 +111,21 @@
           <option value="confundido">Confundido</option>
         </select>
       </div>
-      <div class="form-group" style="margin-bottom: 1rem;">
+      <div class="form-group mb-1">
         <label>Nivel</label>
         <div class="nivel-row">
           <input type="range" id="edit-nivel" min="1" max="100" value="5" />
           <span class="nivel-display" id="edit-nivel-valor">5</span>
         </div>
       </div>
-      <div style="display: flex; gap: 1rem; margin-top: 1.5rem; justify-content: flex-end;">
+      <div class="form-actions">
         <button class="btn btn-secondary" onclick="cerrarModalEditar()">Cancelar</button>
         <button class="btn btn-primary" onclick="guardarEdicion()">Guardar Cambios</button>
       </div>
     </div>
   </div>
 
-  <!-- AUDIO -->
   <audio id="audio-cura" preload="auto">
-    <!--
-      INSTRUCCION: Descarga el archivo "pokemon-center.mp3" y ponelo en frontend/assets/
-      Podés buscarlo en: https://downloads.khinsider.com/game-soundtracks/album/pokemon-red-blue
-      O usar cualquier version libre del tema del Centro Pokemon.
-      El nombre del archivo debe ser: pokemon-center.mp3
-    -->
     <source src="assets/recovery.mp3" type="audio/mpeg" />
   </audio>
 

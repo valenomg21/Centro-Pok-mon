@@ -1,0 +1,223 @@
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 70px);
+  padding: 3rem 2rem;
+  gap: 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero-text {
+  flex: 1;
+}
+
+.hero-badge {
+  display: inline-block;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.45rem;
+  background: var(--rosa-joy);
+  color: var(--blanco);
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.4rem;
+  line-height: 1.8;
+  color: var(--rosa-oscuro);
+  margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--gris-texto);
+  line-height: 1.7;
+  margin-bottom: 2rem;
+  max-width: 420px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+}
+
+.hero-image {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-image img {
+  width: 320px;
+  image-rendering: auto;
+  filter: drop-shadow(0 10px 30px rgba(232, 101, 154, 0.4));
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+.hero-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.nav-card {
+  background: var(--blanco);
+  border-radius: var(--border-radius);
+  padding: 1.8rem 1.5rem;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: var(--sombra-card);
+  transition: var(--transicion);
+  border-top: 4px solid var(--rosa-joy);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  color: var(--negro);
+}
+
+.nav-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--sombra-hover);
+}
+
+.nav-card img {
+  width: 48px;
+  height: 48px;
+}
+
+.nav-card h3 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.55rem;
+  color: var(--rosa-oscuro);
+  line-height: 1.6;
+}
+
+.nav-card p {
+  font-size: 0.8rem;
+  color: var(--gris-texto);
+  line-height: 1.5;
+}
+
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-header h1 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.85rem;
+  color: var(--rosa-oscuro);
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+}
+
+.page-header p {
+  font-size: 0.95rem;
+  color: var(--gris-texto);
+}
+
+.salas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.sala-card {
+  background: var(--blanco);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  box-shadow: var(--sombra-card);
+  border-left: 5px solid var(--azul-centro);
+  transition: var(--transicion);
+}
+
+.sala-card:hover {
+  box-shadow: var(--sombra-hover);
+  transform: translateY(-3px);
+}
+
+.sala-card.ocupada {
+  border-left-color: var(--rojo-critico);
+}
+
+.sala-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.sala-nombre {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.5rem;
+  color: var(--azul-oscuro);
+}
+
+.sala-tipo {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gris-texto);
+  background: var(--gris-claro);
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+
+.sala-pacientes {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sala-paciente-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  background: var(--gris-claro);
+  border-radius: var(--border-radius-sm);
+  font-size: 0.85rem;
+}
+
+.sala-paciente-item img {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.registration-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.preview-sticky-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: sticky;
+  top: 90px;
+}
