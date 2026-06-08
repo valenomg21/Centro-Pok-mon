@@ -2,12 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(100vh - 70px);
-  padding: 3rem 2rem;
-  gap: 4rem;
+  padding: 2.5rem 2rem;
+  gap: 3rem;
   max-width: 1100px;
   margin: 0 auto;
 }
+
 
 .hero-text {
   flex: 1;
@@ -56,7 +56,7 @@
 }
 
 .hero-image img {
-  width: 320px;
+  width: 300px;
   image-rendering: auto;
   filter: drop-shadow(0 10px 30px rgba(232, 101, 154, 0.4));
   animation: float 3s ease-in-out infinite;

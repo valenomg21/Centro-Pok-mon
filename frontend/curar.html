@@ -39,21 +39,16 @@
       <p>Listado completo de pacientes del centro. Podes curar, editar o derivar a internacion.</p>
     </div>
 
-    <div class="tabs mb-1-5">
-      <div class="tabs">
-        <button class="tab-btn active" onclick="filtrarPor('todos', this)">Todos</button>
-        <button class="tab-btn" onclick="filtrarPor('sano', this)">Sanos</button>
-        <button class="tab-btn" onclick="filtrarPor('critico', this)">Criticos</button>
-        <button class="tab-btn" onclick="filtrarPor('internado', this)">Internados</button>
-      </div>
-      <input
-        type="text"
-        id="buscador"
-        class="form-control search-input"
-        placeholder="Buscar por nombre..."
-        oninput="renderTabla()"
-      />
-    </div>
+    <div class="toolbar">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="filtrarPor('todos', this)">Todos</button>
+    <button class="tab-btn" onclick="filtrarPor('sano', this)">Sanos</button>
+    <button class="tab-btn" onclick="filtrarPor('critico', this)">Críticos</button>
+    <button class="tab-btn" onclick="filtrarPor('internado', this)">Internados</button>
+  </div>
+  <input type="text" id="buscador" class="form-control search-input"
+    placeholder="Buscar por nombre..." oninput="renderTabla()" />
+</div>
 
     <div class="pokemon-table-wrapper" id="tabla-wrapper">
       <div class="loading-spinner"></div>

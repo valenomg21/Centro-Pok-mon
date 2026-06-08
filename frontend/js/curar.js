@@ -107,9 +107,6 @@ function renderTabla() {
     const spriteUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${p.shiny ? 'shiny/' : ''}${getPokeId(p.nombre)}.png`;
     const estadoBadge = getEstadoBadge(p.estadoSalud, p.internado);
     const efectoBadge = getEfectoBadge(p.efecto || 'ninguno');
-    const shinyMarca = p.shiny
-      ? '<span class="shiny-icon" title="Shiny"></span>'
-      : '<span style="color: var(--gris-medio);">-</span>';
     const entrenadorNombre = p.entrenador ? p.entrenador.nombre : 'Salvaje';
 
     let acciones = '';
@@ -138,8 +135,8 @@ function renderTabla() {
           />
         </td>
         <td>
-          <strong style="text-transform: capitalize;">${p.nombre}</strong>
-          <br/><small style="color: var(--gris-texto);">${p.especie || ''}</small>
+        <strong style="text-transform: capitalize;">${p.nombre}</strong>${p.shiny ? ' <span style="color:var(--amarillo)">★</span>' : ''}
+        <br/><small style="color: var(--gris-texto);">${p.especie || ''}</small>
         </td>
         <td>${p.tipo || '-'}</td>
         <td>
@@ -147,7 +144,6 @@ function renderTabla() {
         </td>
         <td>${estadoBadge}</td>
         <td>${efectoBadge}</td>
-        <td>${shinyMarca}</td>
         <td>${entrenadorNombre}</td>
         <td>
           <div style="display: flex; gap: 6px; flex-wrap: wrap;">
@@ -168,7 +164,6 @@ function renderTabla() {
           <th>Nivel</th>
           <th>Estado</th>
           <th>Efecto</th>
-          <th>Shiny</th>
           <th>Entrenador</th>
           <th>Acciones</th>
         </tr>
