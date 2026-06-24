@@ -1,0 +1,248 @@
+
+.login-wrapper {
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100vh - 70px);
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 3rem 2rem;
+  gap: 3rem;
+}
+
+
+.login-deco {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-right: 2rem;
+  border-right: 2px solid var(--rosa-suave);
+}
+
+.login-deco-img {
+  width: 220px;
+  filter: drop-shadow(0 10px 30px rgba(232, 101, 154, 0.4));
+  animation: float 3s ease-in-out infinite;
+  align-self: center;
+}
+
+.login-deco-badge {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.42rem;
+  background: var(--rosa-joy);
+  color: var(--blanco);
+  padding: 6px 12px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+.login-deco-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.1rem;
+  line-height: 1.9;
+  color: var(--rosa-oscuro);
+}
+
+.login-deco-text {
+  font-size: 0.92rem;
+  color: var(--gris-texto);
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+
+.login-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+
+.login-tabs {
+  display: flex;
+  background: var(--gris-claro);
+  border-radius: var(--border-radius-sm);
+  padding: 4px;
+  margin-bottom: 2rem;
+  gap: 4px;
+}
+
+.login-tab {
+  flex: 1;
+  font-family: 'Nunito', sans-serif;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: transparent;
+  color: var(--gris-texto);
+  transition: var(--transicion);
+}
+
+.login-tab.active {
+  background: var(--blanco);
+  color: var(--rosa-oscuro);
+  box-shadow: 0 2px 8px rgba(232, 101, 154, 0.18);
+}
+
+.login-tab:hover:not(.active) {
+  color: var(--rosa-oscuro);
+  background: rgba(143, 121, 121, 0.5);
+}
+
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  background: var(--blanco);
+  border-radius: var(--border-radius);
+  padding: 2rem;
+  box-shadow: var(--sombra-card);
+  border-top: 4px solid var(--rosa-joy);
+}
+
+.login-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.login-icon img {
+  width: 40px;
+  height: 40px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.login-title {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.9rem;
+  color: var(--rosa-oscuro);
+  text-align: center;
+  line-height: 1.7;
+}
+
+.login-subtitle {
+  font-size: 0.87rem;
+  color: var(--gris-texto);
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+
+.input-password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-password-wrapper .form-control {
+  padding-right: 44px;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--gris-medio);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: var(--transicion);
+}
+
+.toggle-password:hover {
+  color: var(--rosa-oscuro);
+}
+
+
+.form-alert {
+  font-size: 0.84rem;
+  font-weight: 700;
+  padding: 10px 14px;
+  border-radius: var(--border-radius-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-alert-error {
+  background: var(--rojo-suave);
+  color: var(--rojo-critico);
+  border: 1.5px solid var(--rojo-critico);
+}
+
+.form-alert-success {
+  background: var(--verde-suave);
+  color: var(--verde-sano);
+  border: 1.5px solid var(--verde-sano);
+}
+
+
+.login-footer-text {
+  font-size: 0.83rem;
+  color: var(--gris-texto);
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.login-footer-text a,
+.link-tab {
+  color: var(--rosa-oscuro);
+  font-weight: 800;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.login-footer-text a:hover,
+.link-tab:hover {
+  text-decoration: underline;
+}
+
+
+.btn[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+
+@media (max-width: 700px) {
+  .login-wrapper {
+    flex-direction: column;
+    padding: 2rem 1rem;
+    gap: 2rem;
+  }
+
+  .login-deco {
+    border-right: none;
+    border-bottom: 2px solid var(--rosa-suave);
+    padding-right: 0;
+    padding-bottom: 2rem;
+    align-items: center;
+    text-align: center;
+  }
+
+  .login-deco-img {
+    width: 160px;
+  }
+
+  .login-deco-title {
+    font-size: 0.8rem;
+  }
+
+  .login-deco-text {
+    text-align: center;
+  }
+
+  .login-form {
+    padding: 1.5rem;
+  }
+}
