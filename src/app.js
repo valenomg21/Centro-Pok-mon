@@ -6,6 +6,9 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
+const authRutas = require('./routes/auth')
+app.use('/auth', authRutas)
+
 const pacientesRutas = require('./routes/pacientes')
 app.use('/pokemon', pacientesRutas)
 

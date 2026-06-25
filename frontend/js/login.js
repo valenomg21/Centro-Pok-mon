@@ -43,14 +43,14 @@ function obtenerSesion() {
 
 function cerrarSesion() {
   localStorage.removeItem('cp_usuario');
-  window.location.href = './index.html';
+  window.location.href = './login.html'; ;
 }
 
 // Si ya hay sesion activa, redirigir al inicio
 (function verificarSesionActiva() {
   const sesion = obtenerSesion();
   if (sesion && sesion.id) {
-    window.location.href = '../index.html';
+    window.location.href = './index.html';
   }
 })();
 
@@ -131,7 +131,7 @@ formLogin.addEventListener('submit', async (e) => {
     mostrarAlerta('login-success', `Bienvenido, ${data.usuario.nombre}! Redirigiendo...`, 'success');
 
     setTimeout(() => {
-      window.location.href = '../index.html';
+      window.location.href = './index.html';
     }, 1200);
 
   } catch (err) {
