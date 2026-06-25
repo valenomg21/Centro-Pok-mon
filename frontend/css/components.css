@@ -483,7 +483,7 @@ input:checked + .slider:before {
 }
 
 .pokemon-table tbody td {
-  padding: 12px 16px; /* era 12px 16px */
+  padding: 12px 16px; 
 }
 
 .stat-card {

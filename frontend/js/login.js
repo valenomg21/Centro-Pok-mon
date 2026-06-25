@@ -93,7 +93,7 @@ document.querySelectorAll('.toggle-password').forEach(btn => {
   });
 });
 
-// ---- Login ----
+// login
 
 const btnLoginOriginal = document.getElementById('btn-login')?.innerHTML;
 
@@ -141,7 +141,7 @@ formLogin.addEventListener('submit', async (e) => {
   }
 });
 
-// ---- Registro ----
+// login
 
 const btnRegistroOriginal = document.getElementById('btn-registro')?.innerHTML;
 

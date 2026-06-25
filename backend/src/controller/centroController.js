@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const crearCentro = async (req, res) => {
   try {
-    const { nombre, capacidad, ciudad } = req.body; // Ajusta los campos según tu schema.prisma
+    const { nombre, capacidad, ciudad } = req.body; 
     const nuevoCentro = await prisma.centroPokemon.create({
       data: {
         nombre,
