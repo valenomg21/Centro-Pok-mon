@@ -60,7 +60,16 @@ const MAQUETA = [
 
 async function cargarPokemones() {
   try {
-    const res = await fetch(`${API}/pokemon`);
+    const sesion = JSON.parse(localStorage.getItem('cp_usuario'));
+    const token = sesion?.token;
+
+    const res = await fetch(`${API}/pokemon`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}` 
+      }
+    });
+
     if (!res.ok) throw new Error();
     todosLosPokemones = await res.json();
   } catch {

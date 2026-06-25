@@ -46,7 +46,6 @@ function cerrarSesion() {
   window.location.href = './login.html'; ;
 }
 
-// Si ya hay sesion activa, redirigir al inicio
 (function verificarSesionActiva() {
   const sesion = obtenerSesion();
   if (sesion && sesion.id) {
@@ -123,11 +122,12 @@ formLogin.addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      mostrarAlerta('login-error', data.error || 'Credenciales incorrectas.', 'error');
+      mostrarAlerta('login-error', data.message || data.error || 'Credenciales incorrectas.', 'error');
       return;
     }
 
-    guardarSesion(data.usuario);
+    const usuarioConToken = { ...data.usuario, token: data.token };
+    guardarSesion(usuarioConToken);
     mostrarAlerta('login-success', `Bienvenido, ${data.usuario.nombre}! Redirigiendo...`, 'success');
 
     setTimeout(() => {
@@ -182,13 +182,12 @@ formRegistro.addEventListener('submit', async (e) => {
     const data = await res.json();
 
     if (!res.ok) {
-      mostrarAlerta('reg-error', data.error || 'Error al crear la cuenta.', 'error');
+      mostrarAlerta('reg-error', data.message || data.error || 'Error al crear la cuenta.', 'error');
       return;
     }
 
     mostrarAlerta('reg-success', 'Cuenta creada con exito! Ahora podes iniciar sesion.', 'success');
 
-    // Limpiar formulario y cambiar a tab login
     formRegistro.reset();
     setTimeout(() => activarTab('login'), 1800);
 

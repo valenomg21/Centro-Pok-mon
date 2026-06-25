@@ -211,9 +211,15 @@ async function registrarPokemon() {
   };
 
   try {
+    const sesion = JSON.parse(localStorage.getItem('cp_usuario'));
+    const token = sesion?.token;
+
     const res = await fetch(`${API}/pokemon`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}` 
+      },
       body: JSON.stringify(payload)
     });
 

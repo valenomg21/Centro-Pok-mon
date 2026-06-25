@@ -1,10 +1,24 @@
 const express = require('express')
-const router = express.Router()
+const router = Router = express.Router()
 const pacienteController = require('../controller/pacienteController')
 
-router.get('/', pacienteController.obtenerPacientes)
-router.post('/', pacienteController.crearPaciente)
-router.put('/:id', pacienteController.actualizarPaciente)
-router.delete('/:id', pacienteController.eliminarPaciente)
+const verifyToken = require('../middlewares/verifyToken')
+const authorizeRoles = require('../middlewares/authorizeRoles')
+const validateFields = require('../middlewares/validateFields')
+const { crearPacienteValidators } = require('../validators/paciente.validators')
+
+router.get('/', verifyToken, pacienteController.obtenerPacientes)
+
+router.post('/', 
+  verifyToken, 
+  authorizeRoles('ADMIN', 'SUPERADMIN'), 
+  crearPacienteValidators, 
+  validateFields,         
+  pacienteController.crearPaciente
+)
+
+router.put('/:id', verifyToken, authorizeRoles('ADMIN', 'SUPERADMIN'), pacienteController.actualizarPaciente)
+
+router.delete('/:id', verifyToken, authorizeRoles('ADMIN', 'SUPERADMIN'), pacienteController.eliminarPaciente)
 
 module.exports = router

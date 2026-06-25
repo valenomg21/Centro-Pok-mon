@@ -1,9 +1,15 @@
-const express = require('express')
-const router = express.Router()
-const salaController = require('../controller/salacontroller')
+const express = require('express');
+const router = express.Router();
+const salaController = require('../controller/salacontroller');
 
-router.get('/', salaController.obtenerSalas)
-router.post('/', salaController.crearSalas)
-router.put('/:id', salaController.actualizarSala)
+const verifyToken = require('../middlewares/verifyToken');
+const authorizeRoles = require('../middlewares/authorizeRoles');
 
-module.exports = router
+// Cualquier usuario logueado puede ver las salas
+router.get('/', verifyToken, salaController.obtenerSalas);
+
+// Solo administradores pueden crear o actualizar salas
+router.post('/', verifyToken, authorizeRoles('ADMIN', 'SUPERADMIN'), salaController.crearSalas);
+router.put('/:id', verifyToken, authorizeRoles('ADMIN', 'SUPERADMIN'), salaController.actualizarSala);
+
+module.exports = router;

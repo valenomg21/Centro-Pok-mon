@@ -1,20 +1,21 @@
 const prisma = require('../config/prisma');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const AppError = require('../utils/AppError');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'secreto_centro_pokemon';
 
-const registro = async (req, res) => {
+const registro = async (req, res, next) => {
   try {
     const { nombre, email, password } = req.body;
 
     if (!nombre || !email || !password) {
-      return res.status(400).json({ error: 'Por favor, completa todos los campos.' });
+      return next(new AppError('Por favor, completa todos los campos.', 400));
     }
 
     const usuarioExistente = await prisma.user.findUnique({ where: { email } });
     if (usuarioExistente) {
-      return res.status(400).json({ error: 'El correo electrónico ya está registrado.' });
+      return next(new AppError('El correo electrónico ya está registrado.', 400));
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -37,27 +38,26 @@ const registro = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error del servidor al registrar el usuario.' });
+    next(error);
   }
 };
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ error: 'Por favor, introduce correo y contraseña.' });
+      return next(new AppError('Por favor, introduce correo y contraseña.', 400));
     }
 
     const usuario = await prisma.user.findUnique({ where: { email } });
     if (!usuario) {
-      return res.status(400).json({ error: 'Credenciales incorrectas.' });
+      return next(new AppError('Credenciales incorrectas.', 400));
     }
 
     const passwordValido = await bcrypt.compare(password, usuario.password);
     if (!passwordValido) {
-      return res.status(400).json({ error: 'Credenciales incorrectas.' });
+      return next(new AppError('Credenciales incorrectas.', 400));
     }
 
     const token = jwt.sign(
@@ -75,8 +75,7 @@ const login = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error del servidor durante el inicio de sesión.' });
+    next(error);
   }
 };
 
